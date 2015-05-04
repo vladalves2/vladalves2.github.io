@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>WebGL Examples</title>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href="styles/style.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="scripts/glMatrix-0.9.5.min.js"></script>
+  <script type="text/javascript" src="scripts/seedrandom.js"></script>
+  <script type="text/javascript" src="scripts/basic.js"></script>
+  <script type="text/javascript" src="scripts/mesh.js"></script>
+  <script type="text/javascript" src="scripts/camera.js"></script>
+  <script type="text/javascript" src="scripts/openglviewer.js"></script>
+</head>
+ 
+<body onload="webGLStart();">
+	<br/>
+  <table style="width:100%">
+    <tr>
+      <td>
+        <canvas id="lesson01-canvas" style="border: none;" width="500" height="500" onmouseleave="mouseLeave(event)" onmouseenter="mouseEnter(event)" onmousemove="mouseMove(event)" onmouseup="mouseUp(event)" onmousedown="mouseDown(event)"></canvas>
+      </td>
+      <td>
+        <table style="width:100%">
+          <tr>
+            <td>
+              <input id="area" type="range" min="1.0" max="10.0" step="0.1" value="2.0" oninput="setSize(this.value)"/>
+            </td>
+            <td>
+              Area
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <input id="seed" type="range" min="0" max="5000" step="0.1" oninput="setSeed(this.value)"/>
+            </td>
+            <td>
+              Seed
+            </td>
+          </tr>
+          
+          <tr>
+            <td>
+              <input id="lightIntensity" type="range" min="0" max="500" step="0.1" value="25.0" onchange="setLightIntensity(this.value)" oninput="setLightIntensity(this.value)"/>
+            </td>
+            <td>
+              Light Intensity
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input id="cameraDistance" type="range" min="0" max="100" step="0.1" value ="7.0" oninput="setCameraHeight(this.value)"/>
+            </td>
+            <td>
+              Camera Distance
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>    
+  </table>
+  
+  <br/>
+  <!--
+	<h1>Mozilla is cool</h1>
+	<img src="images/firefox-icon.png" alt="The Firefox logo: a flaming fox surrounding the Earth.">
+	<button>Change user</button>
+	<script src="scripts/main.js"></script>
+  -->
+</body>  
+</html>
