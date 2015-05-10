@@ -1,7 +1,7 @@
 precision mediump float;
 
 uniform float lightIntensity;
-uniform vec3 lightPosition;
+uniform vec3 lightDirection;
 varying vec3 fragNormal;
 varying vec3 fragPosition;
 varying float height;
@@ -13,16 +13,16 @@ void main(void) {
 	if (VdotN <= 0.0) {
 		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 	} else {
-		vec3 lightDirection = lightPosition - fragPosition;
-		float distance = length(lightDirection);
-		lightDirection = normalize(lightDirection);
-		float lambertian = max(dot(lightDirection, fragNormal), 0.0);
+		//vec3 lightDirection = lightPosition - fragPosition;
+		//float distance = length(lightDirection);
+		vec3 lightDirection2 = normalize(lightDirection);
+		float lambertian = max(dot(lightDirection2, fragNormal), 0.0);
 	
-		vec3 halfDirection = normalize(lightDirection + viewDirection);
+		vec3 halfDirection = normalize(lightDirection2 + viewDirection);
 		float NdotH = max(dot(fragNormal, halfDirection), 0.0);
 		float specular = pow(NdotH, 7.0);
 	
-		float intensity = min(lightIntensity * (lambertian + specular) / (distance*distance), 1.0);
+		float intensity = min(lightIntensity * (lambertian + specular), 1.0);// / (distance*distance), 1.0);
 
 		vec3 iceColor = vec3(0.95, 0.98, 0.97);
 		vec3 grassColor = vec3(0.23, 0.76, 0.31);

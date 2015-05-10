@@ -12,7 +12,7 @@ function loadShaders(gl, shaders) {
 	return shaders;
 }
 
-var lightIntensity = 25.0;
+var lightIntensity = 2.0;
 var canvas;
 var meshes = [];
 var camera;
@@ -56,7 +56,7 @@ function initShaders() {
 	this.gl.useProgram(shaderProgram);
 	shaderProgram.positionLoc = this.gl.getAttribLocation(shaderProgram, "position");
 	shaderProgram.normalLoc = this.gl.getAttribLocation(shaderProgram, "pointNormal");
-	shaderProgram.lightPositionLoc = this.gl.getUniformLocation(shaderProgram, "lightPosition");
+	shaderProgram.lightDirectionLoc = this.gl.getUniformLocation(shaderProgram, "lightDirection");
 	shaderProgram.lightIntensityLoc = this.gl.getUniformLocation(shaderProgram, "lightIntensity");
 	shaderProgram.projectionMatrixUniform = this.gl.getUniformLocation(shaderProgram, "projectionMatrix");
 	shaderProgram.modelViewMatrixUniform = this.gl.getUniformLocation(shaderProgram, "modelViewMatrix");
@@ -64,7 +64,7 @@ function initShaders() {
 }
 
 function setLight(){
-	gl.uniform3f(shaderProgram.lightPositionLoc, 0.0, 0.0, 0.05);
+	gl.uniform3f(shaderProgram.lightDirectionLoc, 1.0, 0.0, 1.0);
 	gl.uniform1f(shaderProgram.lightIntensityLoc, this.lightIntensity);
 }
 
@@ -157,16 +157,33 @@ function setLightIntensity(value){
 	drawScene();
 }
 
-function setSeed(value){
-	this.meshes[0].seed = value;
-	this.meshes[0].initialize(3);
+function updateTerrain(index){
+	this.meshes[index].initialize(3);
 	drawScene();
 	drawScene();
 }
 
+function setSeed(value){
+	this.meshes[0].seed = value;
+	updateTerrain(0);
+}
+
 function setSize(value){
 	this.meshes[0].size = value;
-	this.meshes[0].initialize(3);
-	drawScene();
-	drawScene();
+	updateTerrain(0);
+}
+
+function setResolution(value){
+	this.meshes[0].resolution = value;
+	updateTerrain(0);
+}
+
+function setDetail(value){
+	this.meshes[0].detail = value;
+	updateTerrain(0);
+}
+
+function setScale(value){
+	this.meshes[0].scale = value;
+	updateTerrain(0);
 }
