@@ -45,8 +45,9 @@ function initGL(canvas) {
 		
 
 function initShaders() {
-	var shaderObjects = loadShaders(this.gl, ["fs/white", "vs/simple"]);
+	var shaderObjects = loadShaders(this.gl, ["fs/white", "vs/terrain"]);
 	this.shaderProgram = this.gl.createProgram();
+	
 	this.gl.attachShader(shaderProgram, shaderObjects[1]);
 	this.gl.attachShader(shaderProgram, shaderObjects[0]);
 	this.gl.linkProgram(shaderProgram);
@@ -54,8 +55,12 @@ function initShaders() {
 		alert("Could not initialise shaders");
 	}
 	this.gl.useProgram(shaderProgram);
+
 	shaderProgram.positionLoc = this.gl.getAttribLocation(shaderProgram, "position");
 	shaderProgram.normalLoc = this.gl.getAttribLocation(shaderProgram, "pointNormal");
+	shaderProgram.scaleLoc = this.gl.getUniformLocation(shaderProgram, "scale");
+	shaderProgram.maxLvlLoc = this.gl.getUniformLocation(shaderProgram, "maxLvl");
+	shaderProgram.randomLoc = this.gl.getUniformLocation(shaderProgram, "random");
 	shaderProgram.lightDirectionLoc = this.gl.getUniformLocation(shaderProgram, "lightDirection");
 	shaderProgram.lightIntensityLoc = this.gl.getUniformLocation(shaderProgram, "lightIntensity");
 	shaderProgram.projectionMatrixUniform = this.gl.getUniformLocation(shaderProgram, "projectionMatrix");
@@ -64,7 +69,7 @@ function initShaders() {
 }
 
 function setLight(){
-	gl.uniform3f(shaderProgram.lightDirectionLoc, 1.0, 0.0, 1.0);
+	gl.uniform3f(shaderProgram.lightDirectionLoc, 0.0, 0.0, 1.0);
 	gl.uniform1f(shaderProgram.lightIntensityLoc, this.lightIntensity);
 }
 
@@ -73,6 +78,7 @@ function drawScene() {
 	this.gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 	this.camera.setUniforms(this.gl, shaderProgram.projectionMatrixUniform, shaderProgram.modelViewMatrixUniform, shaderProgram.normalMatrix);
+	this.meshes[0].setUniforms(this.gl, shaderProgram);
 	this.setLight();
 
 	this.meshes[0].draw(shaderProgram.positionLoc, shaderProgram.normalLoc);

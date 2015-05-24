@@ -16,13 +16,14 @@ void main(void) {
 		//vec3 lightDirection = lightPosition - fragPosition;
 		//float distance = length(lightDirection);
 		vec3 lightDirection2 = normalize(lightDirection);
-		float lambertian = max(dot(lightDirection2, fragNormal), 0.0);
+		float lambertian = max(abs(dot(lightDirection2, fragNormal)), 0.0);
 	
-		vec3 halfDirection = normalize(lightDirection2 + viewDirection);
-		float NdotH = max(dot(fragNormal, halfDirection), 0.0);
-		float specular = pow(NdotH, 7.0);
+		//vec3 halfDirection = normalize(lightDirection2 + viewDirection);
+		//float NdotH = max(dot(fragNormal, halfDirection), 0.0);
+		//float specular = pow(NdotH, 7.0);
 	
-		float intensity = min(lightIntensity * (lambertian + specular), 1.0);// / (distance*distance), 1.0);
+		//float intensity = min(lightIntensity * (lambertian + specular), 1.0);// / (distance*distance), 1.0);
+		float intensity = max(min(lightIntensity * lambertian, 1.0), 0.0);// / (distance*distance), 1.0);
 
 		vec3 iceColor = vec3(0.95, 0.98, 0.97);
 		vec3 grassColor = vec3(0.23, 0.76, 0.31);

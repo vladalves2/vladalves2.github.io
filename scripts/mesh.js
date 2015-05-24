@@ -18,18 +18,18 @@ function Mesh(type){
 	this.basic = new Basic();
 	this.positionVertexArrayObject = -1;
 	this.positionBuffer = -1;
-	this.normalBuffer = -1;
+	//this.normalBuffer = -1;
 	this.indexBuffer = -1;
 	this.boundingBox = [0,0,0,0,0,0];
 	this.vertices = [];
 	this.normals = [];
 	this.triangleVerticesIds = [];
 
-	this.detail = 20;
-	this.size = 2.0;
+	this.detail = 18.0;
+	this.size = 1.0;
 	this.resolution = 100.0;
 	this.seed = 1.0;
-	this.scale = 0.1;
+	this.scale = 0.7;
 
 	this.randomTable = [0,0,0,0,0,0,0,0,0,0];
 
@@ -278,7 +278,7 @@ function Mesh(type){
 			count2 += 3;
 		}
 		
-		this.loadTerrainHeights(this.scale, this.detail, this.seed);		
+		//this.loadTerrainHeights(this.scale, this.detail, this.seed);		
 	};
 
 	this.computeNormals = function(){
@@ -315,11 +315,11 @@ function Mesh(type){
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
 
-		if (this.normalBuffer != -1)
-			gl.deleteBuffer(this.normalBuffer);
-		this.normalBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
+		//if (this.normalBuffer != -1)
+		//	gl.deleteBuffer(this.normalBuffer);
+		//this.normalBuffer = gl.createBuffer();
+		//gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+		//gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
 		
 		if (this.indexBuffer != -1)
 			gl.deleteBuffer(this.indexBuffer);
@@ -333,9 +333,9 @@ function Mesh(type){
 		gl.enableVertexAttribArray(positionLoc);
 		gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, gl.FALSE, 0, 0);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-		gl.enableVertexAttribArray(normalLoc);
-		gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, gl.FALSE, 0, 0);
+		//gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
+		//gl.enableVertexAttribArray(normalLoc);
+		//gl.vertexAttribPointer(normalLoc, 3, gl.FLOAT, gl.FALSE, 0, 0);
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 		gl.drawElements(gl.TRIANGLES, this.triangleVerticesIds.length, gl.UNSIGNED_INT, 0);
@@ -349,6 +349,31 @@ function Mesh(type){
 		this.loadGeometry(type);
 		this.computeNormals();
 		this.loadBuffers();
+	};
+
+	this.setUniforms = function(gl, shaderProgram){
+		gl.uniform1f(shaderProgram.scaleLoc, this.scale);
+		gl.uniform1i(shaderProgram.maxLvlLoc, this.detail);
+
+
+		Math.seedrandom(this.seed);
+		this.randomTable[0] = Math.random();
+		for (var i = 1; i < 10; i++){
+			var isEqual = 1;
+			while (isEqual == 1) {
+				isEqual = 0;
+				this.randomTable[i] = this.randomTable[i-1] + Math.random();
+				this.randomTable[i] -= Math.floor(this.randomTable[i]);
+				for (var j = 0; j < i; j++) {
+					if (this.randomTable[j] == this.randomTable[i]) {
+						isEqual = 1;
+						break;
+					}
+				}
+			} 
+		}
+
+		gl.uniform1fv(shaderProgram.randomLoc, this.randomTable);
 	};
 
 	this.initialize(type);
